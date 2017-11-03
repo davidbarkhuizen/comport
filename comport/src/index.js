@@ -6,27 +6,12 @@ import './index.css';
 
 class SearchBox extends React.Component {
 
-	constructor(props) {
-
-		super(props)
-
-		this.state = {
-			searchString: ''
-		}
-	}
-
-	updateInputValue(evt) {
-    this.setState({
-      searchString: evt.target.value
-    });
-  }
-
 	render() {
 		return (
 				<input
-					className="search-box normal-font" 
-					value={this.state.searchString} 
-					onChange={evt => this.updateInputValue(evt)}
+					className="font-normal"
+					value={this.props.searchText} 
+					onChange={evt => this.props.onSearchTextChanged(evt)}
 				/>
 		)
 	}
@@ -45,10 +30,22 @@ class Search extends React.Component {
 		}
 	}
 
+	handleSearchTextChanged = (evt) => {
+
+		const newState = Object.assign({}, this.state, {searchText:evt.target.value})
+		this.setState(newState)
+	}
+
 	render() {
 		return (
 			<div>
-				<SearchBox/>
+				<div className="font-normal">search</div>
+				<div>
+					<SearchBox
+						searchText={this.state.searchText}
+						onSearchTextChanged={this.handleSearchTextChanged}
+					/>
+				</div>
 			</div>
 		)
 	}
