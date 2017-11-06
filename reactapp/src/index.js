@@ -25,34 +25,35 @@ function buildModel(things) {
 
 // ----------------------------------------
 
-function buttonClass(isActive) {
-	
-	return (isActive === false)
-		? "btn btn-default"
-		: "btn btn-primary"
-}
 
 // ----------------------------------------
 
 class SearchModeSelector extends React.Component {
 
 	render() {
+
+		function buttonClass(isActive) {
+			
+			return (isActive === false)
+				? "btn btn-default"
+				: "btn btn-primary"
+		}
+
 		return (
 			<div>
-				<div>would you like to search by word or by tag/category ?</div>
+				<div>how would you like to search ?</div>
 				<div>
 					<a 
 						className={buttonClass(this.props.mode === 'word')} 
-						href="#" 
 						role="button"
 						onClick={() => this.props.onModeSelected('word')}
-					>word</a>
+					>search by word</a>
+					&nbsp;
 					<a 
 						className={buttonClass(this.props.mode === 'tag')} 
-						href="#" 
 						role="button"
 						onClick={() => this.props.onModeSelected('tag')}
-					>tag</a>
+					>search by tag</a>
 				</div>
 			</div>
 		)
@@ -64,19 +65,25 @@ class SearchModeSelector extends React.Component {
 class SearchTag extends React.Component {
 
 	render() {
+
+		function buttonClass(isActive) {
+			
+			return (isActive === false)
+				? "btn btn-default search-tag"
+				: "btn btn-primary search-tag"
+		}
+
 		return (
 			<a 
 				onClick={this.props.onClick}
-				className="btn btn-default"
+				className={buttonClass(this.props.isSelected)}
 				role="button"
-				href="#"
 			>{this.props.tag}</a>
 		)
 	}
 }
 
 // ----------------------------------------
-
 
 class SearchTagCloud extends React.Component {
 
@@ -86,12 +93,20 @@ class SearchTagCloud extends React.Component {
 				key={tag}
 				tag={tag}
 				onClick={() => this.props.handleTagClicked(tag)}
+				isSelected={tag === this.props.selectedTag}
 			/>
 		);
 	}
 
 	render() {
-		return this.props.tags.map((tag) => this.renderTag(tag))
+		return (
+			<div>
+				<div>click on tag</div>
+				<div>
+					{this.props.tags.map((tag) => this.renderTag(tag))}
+				</div>
+			</div>
+		)
 	}
 }
 
@@ -105,7 +120,8 @@ class SearchBox extends React.Component {
 				className="font-normal"
 				value={this.props.text} 
 				onChange={evt => this.props.onSearchTextChanged(evt)}
-				placeholder="search..."
+				placeholder="enter search text..."
+				autoFocus={this.props.mode === 'word'}
 			/>
 		)
 	}
@@ -141,7 +157,27 @@ class SearchResults extends React.Component {
 	}
 
 	render() {
-		return this.props.results.map((result) => this.renderSearchResult(result, this.props.handleResultClicked))
+		return (
+			<div>
+				{
+					this.props.mode === "tag"
+						? <div>results matching tag {this.props.tag}</div>
+						: null
+				}
+				{
+					this.props.mode === "word"
+						? <div>results matching word {this.props.text}</div>
+						: null
+				}
+				<div>
+					{
+						(this.props.results.length > 0)
+							? this.props.results.map((result) => this.renderSearchResult(result, this.props.handleResultClicked)) 
+							: 'none'
+					}
+				</div>
+			</div>
+		)
 	}
 }
 
@@ -157,7 +193,7 @@ class Search extends React.Component {
 			mode: '',
 			text: '',
 			tag: '',
-			results: this.props.data // default to full set
+			results: []
 		}
 	}
 
@@ -179,6 +215,11 @@ class Search extends React.Component {
 		}
 
 		token = strip(token)
+
+		// no search token => 
+		//
+		if ((token === null) | (token === undefined) | (token.length === 0))
+			return []
 
 		return things.filter((thing,i,a) => {
 
@@ -232,34 +273,40 @@ class Search extends React.Component {
 	}
 
 	render() {
+		
+		const showSearchTagCloud = this.state.mode === 'tag'
+		const showSearchBox = this.state.mode === 'word'
+		
 		return (
 			<div>	
-				<div>
-					<SearchModeSelector
-						mode={this.props.mode}
-						onModeSelected={this.handleSearchModeChanged}
-					/>
-				</div>
-				<div>
+				<SearchModeSelector
+					mode={this.state.mode}
+					onModeSelected={this.handleSearchModeChanged}
+				/>
+				<br/>
+				{ 
+					(!showSearchTagCloud) ? null : 
 					<SearchTagCloud
 						tags={this.props.tags}
 						handleTagClicked={this.handleSearchTagClicked}
 						className="two-thirds-width"
-					/>
-				</div>	
-				<div>	
+						selectedTag={this.state.tag}
+						/>
+				}
+				{
+					(!showSearchBox) ? null :
 					<SearchBox
 						text={this.state.text}
 						onSearchTextChanged={this.handleSearchTextChanged}
-						className="full-width"
-					/>
-				</div>
-				<div>
-					<div>search results</div>
-					<SearchResults
-						results={this.state.results}
-					/>
-				</div>
+						mode={this.state.mode}
+						className="full-width"/>
+				}
+				<SearchResults
+					mode={this.state.mode}
+					text={this.state.text}
+					tag={this.state.tag}
+					results={this.state.results}
+				/>
 			</div>
 		)
 	}
@@ -275,7 +322,6 @@ ReactDOM.render(
 		<div>community portal</div>
 		<div className="margin"><img src={logo_img} alt="logo"/></div>
 		<Search data={things} tags={tags}/>
-		<hr className="half-width"/>
 	</div>,
 	document.getElementById('root')
 )

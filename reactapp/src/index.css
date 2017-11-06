@@ -45,3 +45,8 @@ body {
 	border:solid;
 	border-color: lightgray;
 }
+
+.search-tag {
+	margin-right:2px;
+}
+
