@@ -40,3 +40,8 @@ body {
 .margin {
 	margin:20px;
 }
+
+.summary-item {
+	border:solid;
+	border-color: lightgray;
+}

@@ -76,7 +76,7 @@ class SummaryItem extends React.Component {
 
 	render() {
 		return (
-			<div>
+			<div className="summary-item">
 				<div>{this.props.thing.name}</div>
 				<div>{this.props.thing.description}</div>
 			</div>
@@ -114,18 +114,49 @@ class Search extends React.Component {
 
 		this.state = {
 			searchText: '',
-			searchResults: []
+			searchResults: this.props.data
 		}
 	}
 
 	search = (things, token) => {
 
+		function strip(x) {
+			//console.dir(s)
+
+			x = (x === null)
+				? ''
+				: x.toString()
+
+			return x.toString().trim().toLowerCase()
+		}
+
+		token = strip(token)
+
 		return things.filter((thing,i,a) => {
 
 			var matches = false
 
-			if (thing.name.indexOf(token) !== -1)
-				matches = true
+			Object.keys(thing).forEach(function(key,index) {
+
+				if (strip(thing[key]).indexOf(token) !== -1)
+					matches = true
+			})
+
+			return matches
+		})
+	}
+
+	searchOnTag = (things, tag) => {
+
+		return things.filter((thing,i,a) => {
+
+			var matches = false
+
+			thing.tags.forEach(function(candidateTag,index) {
+
+				if (candidateTag == tag)
+					matches = true
+			})
 
 			return matches
 		})
@@ -136,12 +167,16 @@ class Search extends React.Component {
 		const searchText = evt.target.value
 		const searchResults = this.search(this.props.data, searchText)
 
-		const newState = Object.assign({}, this.state, {searchText:searchText}, searchResults:searchResults)
+		const newState = Object.assign({}, this.state, {searchText:searchText, searchResults:searchResults})
 		this.setState(newState)
 	}
 
-	handleTagClicked = (tag) => {
-		console.log(tag)
+	handleSearchTagClicked = (tag) => {
+
+		const searchResults = this.searchOnTag(this.props.data, tag)
+
+		const newState = Object.assign({}, this.state, {searchText:'', searchResults:searchResults})
+		this.setState(newState)
 	}
 
 	render() {
@@ -150,7 +185,7 @@ class Search extends React.Component {
 				<div>
 					<SearchTagCloud
 						tags={this.props.tags}
-						handleTagClicked={this.handleTagClicked}
+						handleTagClicked={this.handleSearchTagClicked}
 						className="two-thirds-width"
 					/>
 				</div>	
