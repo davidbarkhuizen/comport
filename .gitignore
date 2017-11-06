@@ -57,3 +57,6 @@ typings/
 # dotenv environment variables file
 .env
 
+
+# apple desktop services store
+.DS_Store
