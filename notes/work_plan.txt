@@ -1,0 +1,8 @@
+
+
+
+search interface
+- search mode = word vs tag <-- visually indicate
+- need to be able to toggle multiple tags ? DOES THIS MAKE SENSE (may be too complicated)
+- visually display clearly between string or tag search
+- change colour of currently selected tag

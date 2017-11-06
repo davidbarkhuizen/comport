@@ -1,12 +1,15 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+
+import '../node_modules/bootstrap/dist/css/bootstrap.min.css';
+
 import './index.css';
 
 import logo_img from './logo.80.png'
 
 import things from './model.json'
 
-// ========================================
+// ----------------------------------------
 
 function buildModel(things) {
 
@@ -20,21 +23,59 @@ function buildModel(things) {
 	}
 }
 
-// ========================================
+// ----------------------------------------
+
+function buttonClass(isActive) {
+	
+	return (isActive === false)
+		? "btn btn-default"
+		: "btn btn-primary"
+}
+
+// ----------------------------------------
+
+class SearchModeSelector extends React.Component {
+
+	render() {
+		return (
+			<div>
+				<div>would you like to search by word or by tag/category ?</div>
+				<div>
+					<a 
+						className={buttonClass(this.props.mode === 'word')} 
+						href="#" 
+						role="button"
+						onClick={() => this.props.onModeSelected('word')}
+					>word</a>
+					<a 
+						className={buttonClass(this.props.mode === 'tag')} 
+						href="#" 
+						role="button"
+						onClick={() => this.props.onModeSelected('tag')}
+					>tag</a>
+				</div>
+			</div>
+		)
+	}
+}
+
+// ----------------------------------------
 
 class SearchTag extends React.Component {
 
 	render() {
 		return (
-			<button 
+			<a 
 				onClick={this.props.onClick}
-				className="font-normal tag-button"
-			>{this.props.tag}</button>
+				className="btn btn-default"
+				role="button"
+				href="#"
+			>{this.props.tag}</a>
 		)
 	}
 }
 
-// ========================================
+// ----------------------------------------
 
 
 class SearchTagCloud extends React.Component {
@@ -54,7 +95,7 @@ class SearchTagCloud extends React.Component {
 	}
 }
 
-// ========================================
+// ----------------------------------------
 
 class SearchBox extends React.Component {
 
@@ -62,7 +103,7 @@ class SearchBox extends React.Component {
 		return (
 			<input
 				className="font-normal"
-				value={this.props.searchText} 
+				value={this.props.text} 
 				onChange={evt => this.props.onSearchTextChanged(evt)}
 				placeholder="search..."
 			/>
@@ -70,7 +111,7 @@ class SearchBox extends React.Component {
 	}
 }
 
-// ========================================
+// ----------------------------------------
 
 class SummaryItem extends React.Component {
 
@@ -85,7 +126,7 @@ class SummaryItem extends React.Component {
 
 }
 
-// ========================================
+// ----------------------------------------
 
 class SearchResults extends React.Component {
 
@@ -104,7 +145,7 @@ class SearchResults extends React.Component {
 	}
 }
 
-// =======================================
+// ----------------------------------------
 
 class Search extends React.Component {
 
@@ -113,17 +154,24 @@ class Search extends React.Component {
 		super(props)
 
 		this.state = {
-			searchText: '',
-			searchResults: this.props.data
+			mode: '',
+			text: '',
+			tag: '',
+			results: this.props.data // default to full set
 		}
 	}
 
-	search = (things, token) => {
+	handleSearchModeChanged = (newMode) => {
+
+		const newState = Object.assign({}, this.state, {mode:newMode})
+		this.researchAndSetState(newState)
+	}
+
+	searchOnToken = (things, token) => {
 
 		function strip(x) {
-			//console.dir(s)
 
-			x = (x === null)
+			x = ((x === null) || (x === undefined))
 				? ''
 				: x.toString()
 
@@ -154,7 +202,7 @@ class Search extends React.Component {
 
 			thing.tags.forEach(function(candidateTag,index) {
 
-				if (candidateTag == tag)
+				if (candidateTag === tag)
 					matches = true
 			})
 
@@ -162,26 +210,36 @@ class Search extends React.Component {
 		})
 	}
 
+	researchAndSetState = (newState) => {
+
+		newState.results = (newState.mode === 'word')
+			? this.searchOnToken(this.props.data, newState.text)
+			: this.searchOnTag(this.props.data, newState.tag)
+
+		this.setState(newState)
+	}
+
 	handleSearchTextChanged = (evt) => {
 
-		const searchText = evt.target.value
-		const searchResults = this.search(this.props.data, searchText)
-
-		const newState = Object.assign({}, this.state, {searchText:searchText, searchResults:searchResults})
-		this.setState(newState)
+		const newState = Object.assign({}, this.state, {text:evt.target.value})
+		this.researchAndSetState(newState)
 	}
 
 	handleSearchTagClicked = (tag) => {
 
-		const searchResults = this.searchOnTag(this.props.data, tag)
-
-		const newState = Object.assign({}, this.state, {searchText:'', searchResults:searchResults})
-		this.setState(newState)
+		const newState = Object.assign({}, this.state, {tag:tag})
+		this.researchAndSetState(newState)
 	}
 
 	render() {
 		return (
 			<div>	
+				<div>
+					<SearchModeSelector
+						mode={this.props.mode}
+						onModeSelected={this.handleSearchModeChanged}
+					/>
+				</div>
 				<div>
 					<SearchTagCloud
 						tags={this.props.tags}
@@ -189,9 +247,9 @@ class Search extends React.Component {
 						className="two-thirds-width"
 					/>
 				</div>	
-				<div className="margin">	
+				<div>	
 					<SearchBox
-						searchText={this.state.searchText}
+						text={this.state.text}
 						onSearchTextChanged={this.handleSearchTextChanged}
 						className="full-width"
 					/>
@@ -199,7 +257,7 @@ class Search extends React.Component {
 				<div>
 					<div>search results</div>
 					<SearchResults
-						results={this.state.searchResults}
+						results={this.state.results}
 					/>
 				</div>
 			</div>
@@ -207,7 +265,7 @@ class Search extends React.Component {
 	}
 }
 
-// ========================================
+// ----------------------------------------
 
 const {tags} = buildModel(things)
 
