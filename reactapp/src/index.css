@@ -57,3 +57,7 @@ body {
 	color: #337ab7;
 }
 
+.hidden { 
+	display: none; 
+}
+

@@ -6,9 +6,10 @@ import './index.css';
 // enums
 
 const SearchMode = Object.freeze({
-    Word:   Symbol("word"),
-    Tag:  Symbol("tag"),
-    None: Symbol("none")
+    Word:   Symbol('word'),
+    Tag:  Symbol('tag'),
+    List: Symbol('list'),
+    None: Symbol('none')
 });
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
@@ -26,8 +27,7 @@ class SearchModeSelector extends React.Component {
 
 		return (
 			<div>
-				<div className="font-normal">search</div>
-				<div>how would you like to search ?</div>
+				<div>how would you like to find local business and activities?</div>
 				<div>
 					<a 
 						className={buttonClass(this.props.mode === SearchMode.Word)} 
@@ -40,6 +40,11 @@ class SearchModeSelector extends React.Component {
 						role="button"
 						onClick={() => this.props.onModeSelected(SearchMode.Tag)}
 					>search by tag</a>
+					<a 
+						className={buttonClass(this.props.mode === SearchMode.List)} 
+						role="button"
+						onClick={() => this.props.onModeSelected(SearchMode.List)}
+					>view all</a>
 				</div>
 			</div>
 		)
@@ -245,9 +250,18 @@ class Search extends React.Component {
 
 	researchAndSetState = (newState) => {
 
-		newState.results = (newState.mode === SearchMode.Word)
-			? this.searchOnToken(this.props.data, newState.text)
-			: this.searchOnTag(this.props.data, newState.tag)
+		switch(newState.mode) {
+		    case SearchMode.Word:
+		        newState.results = this.searchOnToken(this.props.data, newState.text)
+		        break
+		    case SearchMode.Tag:
+		        newState.results = this.searchOnTag(this.props.data, newState.tag)
+		        break
+		    case SearchMode.List:
+		    	newState.results = this.props.data
+		    default:
+		        break
+		}
 
 		this.setState(newState)
 	}
@@ -270,12 +284,17 @@ class Search extends React.Component {
 		const showSearchBox = this.state.mode === SearchMode.Word
 		
 		return (
-			<div>	
+			<div className={this.props.isVisible ? '' : 'hidden'}>	
+
+				<div className="font-normal">businesses and activities</div>
+
 				<SearchModeSelector
 					mode={this.state.mode}
 					onModeSelected={this.handleSearchModeChanged}
 				/>
+
 				<br/>
+				
 				{ 
 					(!showSearchTagCloud) ? null : 
 					<SearchTagCloud
@@ -293,7 +312,9 @@ class Search extends React.Component {
 						mode={this.state.mode}
 						className="full-width"/>
 				}
+				
 				<br/>
+				
 				<SearchResults
 					mode={this.state.mode}
 					text={this.state.text}
