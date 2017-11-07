@@ -101,7 +101,7 @@ class SearchTagCloud extends React.Component {
 	render() {
 		return (
 			<div>
-				<div>click on tag</div>
+				<div>click on a tag</div>
 				<div>
 					{this.props.tags.map((tag) => this.renderTag(tag))}
 				</div>
@@ -116,13 +116,15 @@ class SearchBox extends React.Component {
 
 	render() {
 		return (
-			<input
-				className="font-normal"
-				value={this.props.text} 
-				onChange={evt => this.props.onSearchTextChanged(evt)}
-				placeholder="enter search text..."
-				autoFocus={this.props.mode === 'word'}
-			/>
+			<div>
+				<input
+					className="font-normal"
+					value={this.props.text} 
+					onChange={evt => this.props.onSearchTextChanged(evt)}
+					placeholder="enter search text..."
+					autoFocus={this.props.mode === 'word'}
+				/>
+			</div>
 		)
 	}
 }
@@ -160,20 +162,24 @@ class SearchResults extends React.Component {
 		return (
 			<div>
 				{
-					this.props.mode === "tag"
-						? <div>results matching tag {this.props.tag}</div>
-						: null
+					this.props.mode !== "tag"
+						? null
+						: (this.props.tag.length > 0)
+							? <div>results matching tag <span className="bootstrap-blue">{this.props.tag}</span></div>
+							: <div>no tag selected, click on a tag</div>
 				}
 				{
-					this.props.mode === "word"
-						? <div>results matching word {this.props.text}</div>
-						: null
+					this.props.mode !== "word"
+						? null
+						: (this.props.text.length > 0)
+							? <div>results matching word <span className="bootstrap-blue">{this.props.text}</span></div>
+							: <div>start typing to search</div>
 				}
 				<div>
 					{
 						(this.props.results.length > 0)
 							? this.props.results.map((result) => this.renderSearchResult(result, this.props.handleResultClicked)) 
-							: 'none'
+							: (this.props.mode !== '' ? 'no matching results' : null)
 					}
 				</div>
 			</div>
@@ -301,6 +307,7 @@ class Search extends React.Component {
 						mode={this.state.mode}
 						className="full-width"/>
 				}
+				<br/>
 				<SearchResults
 					mode={this.state.mode}
 					text={this.state.text}
