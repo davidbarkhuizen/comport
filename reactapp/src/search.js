@@ -259,6 +259,7 @@ class Search extends React.Component {
 		        break
 		    case SearchMode.List:
 		    	newState.results = this.props.data
+		    	break
 		    default:
 		        break
 		}
