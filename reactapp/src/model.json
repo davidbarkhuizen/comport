@@ -1,38 +1,40 @@
-[
-	{
-		"id": 0,
-		"name" : "Black Pearl Industries",
-		"description" : "Technology & Logistics",
-		"text" : "Harnassing Technology to Drive Social Advance",
-		"telephones" : ["123-456-7890"],
-		"emails" : ["info@black.pearl.com"],
-		"url" : "black.pearl.com",
-		"geoLocation" : "+23-23",
-		"streetAddress": "909 StoneFish Street",
-		"tags": ["tech", "fishing", "conservation", "hiking", "gardening"]
-	},
-	{
-		"id": 1,
-		"name" : "Katay Racing - Liquid Friction Watercrafts",
-		"description" : "High-End Boats for Sale and Rent",
-		"text" : "blah blah blah blah blah blah blah blah blah blah ",
-		"telephones" : ["011 475 4892", "011 475 9274", "083 266 1458"],
-		"emails" : ["heather@katayracing.co.za"],
-		"url" : "http://www.katayracing.co.za",
-		"geoLocation" : "S26 08' 182 & E27 55' 980",
-		"streetAddress": "",
-		"tags": ["boating", "fishing", "racing"]
-	},
-	{
-		"id": 2,
-		"name" : "Harcourts Vaal Dam",
-		"description" : "Vaal Dam Real Estate",
-		"text" : "Property is our business, creating a lifestyle for our customers is our passion.",
-		"telephones" : ["+27 16 372 1366", "+27 72 399 6700"],
-		"emails" : ["vaaldam@harcourts.co.za"],
-		"url" : "http://vaaldam.harcourts.co.za/",
-		"geoLocation" : null,
-		"streetAddress": "69 Anchovy Road",
-		"tags": ["property", "real-estate", "rental"]
-	}
-]
+{
+	"directory" : [
+		{
+			"id": 0,
+			"name" : "Black Pearl Industries",
+			"description" : "Technology & Logistics",
+			"text" : "Harnassing Technology to Drive Social Advance",
+			"telephones" : ["123-456-7890"],
+			"emails" : ["info@black.pearl.com"],
+			"url" : "black.pearl.com",
+			"geoLocation" : "+23-23",
+			"streetAddress": "909 StoneFish Street",
+			"tags": ["tech", "fishing", "conservation", "hiking", "gardening"]
+		},
+		{
+			"id": 1,
+			"name" : "Katay Racing - Liquid Friction Watercrafts",
+			"description" : "High-End Boats for Sale and Rent",
+			"text" : "blah blah blah blah blah blah blah blah blah blah ",
+			"telephones" : ["011 475 4892", "011 475 9274", "083 266 1458"],
+			"emails" : ["heather@katayracing.co.za"],
+			"url" : "http://www.katayracing.co.za",
+			"geoLocation" : "S26 08' 182 & E27 55' 980",
+			"streetAddress": "",
+			"tags": ["boating", "fishing", "racing"]
+		},
+		{
+			"id": 2,
+			"name" : "Harcourts Vaal Dam",
+			"description" : "Vaal Dam Real Estate",
+			"text" : "Property is our business, creating a lifestyle for our customers is our passion.",
+			"telephones" : ["+27 16 372 1366", "+27 72 399 6700"],
+			"emails" : ["vaaldam@harcourts.co.za"],
+			"url" : "http://vaaldam.harcourts.co.za/",
+			"geoLocation" : null,
+			"streetAddress": "69 Anchovy Road",
+			"tags": ["property", "real-estate", "rental"]
+		}
+	]
+}

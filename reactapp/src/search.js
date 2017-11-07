@@ -3,6 +3,15 @@ import '../node_modules/bootstrap/dist/css/bootstrap.min.css';
 import './index.css';
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+// enums
+
+const SearchMode = Object.freeze({
+    Word:   Symbol("word"),
+    Tag:  Symbol("tag"),
+    None: Symbol("none")
+});
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
 class SearchModeSelector extends React.Component {
 
@@ -21,15 +30,15 @@ class SearchModeSelector extends React.Component {
 				<div>how would you like to search ?</div>
 				<div>
 					<a 
-						className={buttonClass(this.props.mode === 'word')} 
+						className={buttonClass(this.props.mode === SearchMode.Word)} 
 						role="button"
-						onClick={() => this.props.onModeSelected('word')}
+						onClick={() => this.props.onModeSelected(SearchMode.Word)}
 					>search by word</a>
 					&nbsp;
 					<a 
-						className={buttonClass(this.props.mode === 'tag')} 
+						className={buttonClass(this.props.mode === SearchMode.Tag)} 
 						role="button"
-						onClick={() => this.props.onModeSelected('tag')}
+						onClick={() => this.props.onModeSelected(SearchMode.Tag)}
 					>search by tag</a>
 				</div>
 			</div>
@@ -99,7 +108,7 @@ class SearchBox extends React.Component {
 					value={this.props.text} 
 					onChange={evt => this.props.onSearchTextChanged(evt)}
 					placeholder="enter search text..."
-					autoFocus={this.props.mode === 'word'}
+					autoFocus={this.props.mode === SearchMode.Word}
 				/>
 			</div>
 		)
@@ -139,14 +148,14 @@ class SearchResults extends React.Component {
 		return (
 			<div>
 				{
-					this.props.mode !== "tag"
+					this.props.mode !== SearchMode.Tag
 						? null
 						: (this.props.tag.length > 0)
 							? <div>results matching tag <span className="bootstrap-blue">{this.props.tag}</span></div>
 							: <div>no tag selected, click on a tag</div>
 				}
 				{
-					this.props.mode !== "word"
+					this.props.mode !== SearchMode.Word
 						? null
 						: (this.props.text.length > 0)
 							? <div>results matching word <span className="bootstrap-blue">{this.props.text}</span></div>
@@ -156,7 +165,7 @@ class SearchResults extends React.Component {
 					{
 						(this.props.results.length > 0)
 							? this.props.results.map((result) => this.renderSearchResultItem(result, this.props.handleResultClicked)) 
-							: (this.props.mode !== '' ? 'no matching results' : null)
+							: (this.props.mode !== SearchMode.None ? 'no matching results' : null)
 					}
 				</div>
 			</div>
@@ -173,7 +182,7 @@ class Search extends React.Component {
 		super(props)
 
 		this.state = {
-			mode: '',
+			mode: SearchMode.None,
 			text: '',
 			tag: '',
 			results: []
@@ -236,7 +245,7 @@ class Search extends React.Component {
 
 	researchAndSetState = (newState) => {
 
-		newState.results = (newState.mode === 'word')
+		newState.results = (newState.mode === SearchMode.Word)
 			? this.searchOnToken(this.props.data, newState.text)
 			: this.searchOnTag(this.props.data, newState.tag)
 
@@ -257,8 +266,8 @@ class Search extends React.Component {
 
 	render() {
 		
-		const showSearchTagCloud = this.state.mode === 'tag'
-		const showSearchBox = this.state.mode === 'word'
+		const showSearchTagCloud = this.state.mode === SearchMode.Tag
+		const showSearchBox = this.state.mode === SearchMode.Word
 		
 		return (
 			<div>	
