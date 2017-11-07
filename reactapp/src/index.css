@@ -44,6 +44,9 @@ body {
 .summary-item {
 	border:solid;
 	border-color: lightgray;
+	margin:0 auto;
+	margin-bottom: 5px;
+	border-radius: 20px;
 }
 
 .search-tag {
