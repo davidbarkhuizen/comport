@@ -9,6 +9,7 @@ import logo_img from './logo.80.png'
 import rawModel from './model.json'
 
 import Search from './search.js'
+import EventCalendar from './eventcalendar.js'
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
@@ -98,6 +99,7 @@ class App extends React.Component {
 				<br/>
 				
 				<Search data={this.props.model.directory} tags={this.props.model.tags} isVisible={this.state.appMode === AppMode.Directory}/>
+				<EventCalendar isVisible={this.state.appMode === AppMode.Calendar}/>
 			</div>
 		)
 	}
