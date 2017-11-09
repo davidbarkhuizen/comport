@@ -2,19 +2,21 @@ import React from 'react';
 import '../../node_modules/bootstrap/dist/css/bootstrap.min.css';
 import '../css/index.css';
 
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
-// enums
+import Konst from '../konst.js'
 
-const SearchMode = Object.freeze({
-    Word:   Symbol('word'),
-    Tag:  Symbol('tag'),
-    List: Symbol('list'),
-    None: Symbol('none')
-});
+import ActionTypes from '../actionTypes.js'
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
 class SearchModeSelector extends React.Component {
+
+	onModeSelected(mode) {
+
+		const action = { type: ActionTypes.SET_DIRECTORY_SEARCH_MODE, mode}
+		this.props.store.dispatch(action)
+
+		this.props.onModeSelected(mode)
+	}
 
 	render() {
 
@@ -30,20 +32,20 @@ class SearchModeSelector extends React.Component {
 				<div>how would you like to find local business and activities?</div>
 				<div>
 					<a 
-						className={buttonClass(this.props.mode === SearchMode.Word)} 
+						className={buttonClass(this.props.mode === Konst.SearchMode.Word)} 
 						role="button"
-						onClick={() => this.props.onModeSelected(SearchMode.Word)}
+						onClick={() => this.onModeSelected(Konst.SearchMode.Word)}
 					>search by word</a>
 					&nbsp;
 					<a 
-						className={buttonClass(this.props.mode === SearchMode.Tag)} 
+						className={buttonClass(this.props.mode === Konst.SearchMode.Tag)} 
 						role="button"
-						onClick={() => this.props.onModeSelected(SearchMode.Tag)}
+						onClick={() => this.onModeSelected(Konst.SearchMode.Tag)}
 					>search by tag</a>
 					<a 
-						className={buttonClass(this.props.mode === SearchMode.List)} 
+						className={buttonClass(this.props.mode === Konst.SearchMode.List)} 
 						role="button"
-						onClick={() => this.props.onModeSelected(SearchMode.List)}
+						onClick={() => this.onModeSelected(Konst.SearchMode.List)}
 					>view all</a>
 				</div>
 			</div>
@@ -105,15 +107,23 @@ class SearchTagCloud extends React.Component {
 
 class SearchBox extends React.Component {
 
+	onSearchTextChanged(evt) {
+
+		const action = { type: ActionTypes.SET_DIRECTORY_SEARCH_TEXT, text:evt.target.value}
+		this.props.store.dispatch(action)
+
+		this.props.onSearchTextChanged(evt)
+	}
+
 	render() {
 		return (
 			<div>
 				<input
 					className="font-normal"
 					value={this.props.text} 
-					onChange={evt => this.props.onSearchTextChanged(evt)}
+					onChange={evt => this.onSearchTextChanged(evt)}
 					placeholder="enter search text..."
-					autoFocus={this.props.mode === SearchMode.Word}
+					autoFocus={this.props.mode === Konst.SearchMode.Word}
 				/>
 			</div>
 		)
@@ -153,14 +163,14 @@ class SearchResults extends React.Component {
 		return (
 			<div>
 				{
-					this.props.mode !== SearchMode.Tag
+					this.props.mode !== Konst.SearchMode.Tag
 						? null
 						: (this.props.tag.length > 0)
 							? <div>results matching tag <span className="bootstrap-blue">{this.props.tag}</span></div>
 							: <div>no tag selected, click on a tag</div>
 				}
 				{
-					this.props.mode !== SearchMode.Word
+					this.props.mode !== Konst.SearchMode.Word
 						? null
 						: (this.props.text.length > 0)
 							? <div>results matching word <span className="bootstrap-blue">{this.props.text}</span></div>
@@ -170,7 +180,7 @@ class SearchResults extends React.Component {
 					{
 						(this.props.results.length > 0)
 							? this.props.results.map((result) => this.renderSearchResultItem(result, this.props.handleResultClicked)) 
-							: (this.props.mode !== SearchMode.None ? 'no matching results' : null)
+							: (this.props.mode !== Konst.SearchMode.None ? 'no matching results' : null)
 					}
 				</div>
 			</div>
@@ -187,7 +197,7 @@ class Search extends React.Component {
 		super(props)
 
 		this.state = {
-			mode: SearchMode.None,
+			mode: Konst.SearchMode.None,
 			text: '',
 			tag: '',
 			results: []
@@ -251,13 +261,13 @@ class Search extends React.Component {
 	researchAndSetState = (newState) => {
 
 		switch(newState.mode) {
-		    case SearchMode.Word:
+		    case Konst.SearchMode.Word:
 		        newState.results = this.searchOnToken(this.props.data, newState.text)
 		        break
-		    case SearchMode.Tag:
+		    case Konst.SearchMode.Tag:
 		        newState.results = this.searchOnTag(this.props.data, newState.tag)
 		        break
-		    case SearchMode.List:
+		    case Konst.SearchMode.List:
 		    	newState.results = this.props.data
 		    	break
 		    default:
@@ -281,8 +291,8 @@ class Search extends React.Component {
 
 	render() {
 		
-		const showSearchTagCloud = this.state.mode === SearchMode.Tag
-		const showSearchBox = this.state.mode === SearchMode.Word
+		const showSearchTagCloud = this.state.mode === Konst.SearchMode.Tag
+		const showSearchBox = this.state.mode === Konst.SearchMode.Word
 		
 		return (
 			<div className={this.props.isVisible ? '' : 'hidden'}>	
@@ -292,6 +302,7 @@ class Search extends React.Component {
 				<SearchModeSelector
 					mode={this.state.mode}
 					onModeSelected={this.handleSearchModeChanged}
+					store={this.props.store}
 				/>
 
 				<br/>
@@ -303,7 +314,8 @@ class Search extends React.Component {
 						handleTagClicked={this.handleSearchTagClicked}
 						className="two-thirds-width"
 						selectedTag={this.state.tag}
-						/>
+						store={this.props.store}
+					/>
 				}
 				{
 					(!showSearchBox) ? null :
@@ -311,7 +323,9 @@ class Search extends React.Component {
 						text={this.state.text}
 						onSearchTextChanged={this.handleSearchTextChanged}
 						mode={this.state.mode}
-						className="full-width"/>
+						className="full-width"
+						store={this.props.store}
+					/>
 				}
 				
 				<br/>

@@ -10,6 +10,10 @@ import rawModel from './model.json'
 
 import App from './components/app.js'
 
+import { appReducer } from './reducers/app.js'
+
+import Konst from './konst.js'
+
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
 function buildModel(rawModel) {
@@ -27,9 +31,32 @@ function buildModel(rawModel) {
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
+function initialState() {
+
+	return {
+		appMode: Konst.AppMode.None,
+		directory: {
+			search: {
+				mode: Konst.SearchMode.None,
+				text: '',
+				tag: '',
+				results: []				
+			}
+		}
+	}
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+
+const store = createStore(appReducer, initialState())
+
+const unsubscribe = store.subscribe(() => {})
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+
 const model = buildModel(rawModel)
 
 ReactDOM.render(
-	<App model={model}/>,
+	<App model={model} store={store}/>,
 	document.getElementById('root')
 )

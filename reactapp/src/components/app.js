@@ -5,6 +5,10 @@ import React from 'react';
 import Search from './search.js'
 import EventCalendar from './eventcalendar.js'
 
+// actionTypes
+
+import ActionTypes from '../actionTypes.js'
+
 import '../../node_modules/bootstrap/dist/css/bootstrap.min.css';
 import '../css/index.css';
 
@@ -12,16 +16,19 @@ import logo_img from '../images/logo.80.png'
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
-const AppMode = Object.freeze(
-{
-    Calendar:   Symbol("calendar"),
-    Directory:  Symbol("directory"),
-    None: Symbol("none")
-});
+import Konst from '../konst.js'
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
 class AppModeSelector extends React.Component {
+
+	onAppModeChanged(mode) {
+
+		const action = { type: ActionTypes.SET_APP_MODE, mode}
+		this.props.store.dispatch(action)
+		
+		this.props.onModeSelected(mode)
+	}
 
 	render() {
 
@@ -37,15 +44,15 @@ class AppModeSelector extends React.Component {
 				<div>what are you looking for ?</div>
 				<div>
 					<a 
-						className={buttonClass(this.props.mode === AppMode.Directory)} 
+						className={buttonClass(this.props.mode === Konst.AppMode.Directory)} 
 						role="button"
-						onClick={() => this.props.onModeSelected(AppMode.Directory)}
+						onClick={() => this.onAppModeChanged(Konst.AppMode.Directory) }
 					>businesses and activities</a>
 					&nbsp;
 					<a 
-						className={buttonClass(this.props.mode === AppMode.Calendar)} 
+						className={buttonClass(this.props.mode === Konst.AppMode.Calendar)} 
 						role="button"
-						onClick={() => this.props.onModeSelected(AppMode.Calendar)}
+						onClick={() => this.onAppModeChanged(Konst.AppMode.Calendar) }
 					>calendar of events</a>
 				</div>
 			</div>
@@ -58,10 +65,11 @@ class AppModeSelector extends React.Component {
 class App extends React.Component {
 
 	constructor(props) {
+
 		super(props)
 
 		this.state = {
-			appMode: AppMode.None
+			appMode: Konst.AppMode.None
 		}
 	}
 
@@ -80,11 +88,16 @@ class App extends React.Component {
 					<div>local businesses, activities and events</div>
 				</div>
 				<div className="margin"><img src={logo_img} alt="logo"/></div>
-				<AppModeSelector mode={this.state.appMode} onModeSelected={(newMode) => { this.handleAppModeChanged(newMode) } }/>
+				<AppModeSelector mode={this.state.appMode} onModeSelected={(newMode) => { this.handleAppModeChanged(newMode) } } store={this.props.store}/>
 				<br/>
 				
-				<Search data={this.props.model.directory} tags={this.props.model.tags} isVisible={this.state.appMode === AppMode.Directory}/>
-				<EventCalendar isVisible={this.state.appMode === AppMode.Calendar}/>
+				<Search 
+					data={this.props.model.directory} 
+					tags={this.props.model.tags} 
+					isVisible={this.state.appMode === Konst.AppMode.Directory}
+					store={this.props.store}
+				/>
+				<EventCalendar isVisible={this.state.appMode === Konst.AppMode.Calendar}/>
 			</div>
 		)
 	}
