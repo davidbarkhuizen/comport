@@ -4,22 +4,6 @@ import ActionTypes from '../actionTypes.js'
 
 import Konst from '../konst.js'
 
-function initialState() {
-
-	return {
-		app: { mode: Konst.AppMode.None
-		},
-		directory: {
-			search: {
-				mode: Konst.SearchMode.None,
-				text: '',
-				tag: '',
-				results: []				
-			}
-		}
-	}
-}
-
 function directorySearch(state, action) {
 
 	switch (action.type)
