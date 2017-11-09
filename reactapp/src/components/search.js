@@ -10,11 +10,14 @@ import ActionTypes from '../actionTypes.js'
 
 class SearchModeSelector extends React.Component {
 
+	caSET_DIRECTORY_SEARCH_MODE(mode) {
+
+		return { type: ActionTypes.SET_DIRECTORY_SEARCH_MODE, mode}
+	}
+
 	onModeSelected(mode) {
 
-		const action = { type: ActionTypes.SET_DIRECTORY_SEARCH_MODE, mode}
-		this.props.store.dispatch(action)
-
+		this.props.store.dispatch(this.caSET_DIRECTORY_SEARCH_MODE(mode))
 		this.props.onModeSelected(mode)
 	}
 
@@ -80,12 +83,23 @@ class SearchTag extends React.Component {
 
 class SearchTagCloud extends React.Component {
 
+	caSET_DIRECTORY_SEARCH_TAG(tag) {
+
+		return { type: ActionTypes.SET_DIRECTORY_SEARCH_TAG, tag}
+	}
+
+	onTagSelected(tag) {
+
+		this.props.store.dispatch(this.caSET_DIRECTORY_SEARCH_TAG(tag))
+		this.props.handleTagClicked(tag)
+	}
+
 	renderTag(tag, handleClick) {
 		return (
 			<SearchTag
 				key={tag}
 				tag={tag}
-				onClick={() => this.props.handleTagClicked(tag)}
+				onClick={() => this.onTagSelected(tag)}
 				isSelected={tag === this.props.selectedTag}
 			/>
 		);
@@ -107,11 +121,14 @@ class SearchTagCloud extends React.Component {
 
 class SearchBox extends React.Component {
 
+	caSET_DIRECTORY_SEARCH_TEXT(text) {
+
+		return { type: ActionTypes.SET_DIRECTORY_SEARCH_TEXT, text}
+	}
+
 	onSearchTextChanged(evt) {
 
-		const action = { type: ActionTypes.SET_DIRECTORY_SEARCH_TEXT, text:evt.target.value}
-		this.props.store.dispatch(action)
-
+		this.props.store.dispatch(this.caSET_DIRECTORY_SEARCH_TEXT(evt.target.value))
 		this.props.onSearchTextChanged(evt)
 	}
 

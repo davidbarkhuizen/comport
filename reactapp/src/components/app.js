@@ -22,11 +22,14 @@ import Konst from '../konst.js'
 
 class AppModeSelector extends React.Component {
 
+	caSET_APP_MODE(mode) {
+
+		return { type: ActionTypes.SET_APP_MODE, mode}
+	}
+
 	onAppModeChanged(mode) {
 
-		const action = { type: ActionTypes.SET_APP_MODE, mode}
-		this.props.store.dispatch(action)
-		
+		this.props.store.dispatch(this.caSET_APP_MODE(mode))
 		this.props.onModeSelected(mode)
 	}
 

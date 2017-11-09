@@ -1,8 +1,8 @@
 import ActionTypes from '../actionTypes.js'
 
-const initialState = { }
+// (previousState, action) => newState
 
-function appReducer(state = initialState, action) {
+function appReducer(state, action) {
 
 	console.log('action:')
 	console.log(action)
