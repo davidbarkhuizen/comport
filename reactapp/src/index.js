@@ -10,7 +10,7 @@ import rawModel from './model.json'
 
 import App from './components/app.js'
 
-import { appReducer } from './reducers/app.js'
+import { rootReducer } from './reducers/app.js'
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
@@ -29,7 +29,7 @@ function buildModel(rawModel) {
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
-const store = createStore(appReducer)
+const store = createStore(rootReducer)
 
 const unsubscribe = store.subscribe(() => {
 

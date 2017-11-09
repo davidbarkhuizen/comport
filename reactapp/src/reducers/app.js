@@ -1,3 +1,5 @@
+import { combineReducers } from 'redux'
+
 import ActionTypes from '../actionTypes.js'
 
 import Konst from '../konst.js'
@@ -5,7 +7,8 @@ import Konst from '../konst.js'
 function initialState() {
 
 	return {
-		appMode: Konst.AppMode.None,
+		app: { mode: Konst.AppMode.None
+		},
 		directory: {
 			search: {
 				mode: Konst.SearchMode.None,
@@ -28,11 +31,22 @@ function directorySearch(state, action) {
 		case ActionTypes.SET_DIRECTORY_SEARCH_TAG:
 			return Object.assign({}, state, { tag: action.tag })
 		default:
-			return state		
+			return state
 	}
 }
 
 function directory(state, action) {
+
+	state = (state !== undefined)
+		? state
+		: {
+			search: {
+				mode: Konst.SearchMode.None,
+				text: '',
+				tag: '',
+				results: []				
+			}
+		}
 
 	switch (action.type)
 	{
@@ -45,19 +59,24 @@ function directory(state, action) {
 	}
 }
 
-function appReducer(state = initialState(), action) {
+function app(state, action) {
+
+	state = (state !== undefined)
+		? state
+		: { mode: Konst.AppMode.None }
 
 	switch (action.type)
 	{
 		case ActionTypes.SET_APP_MODE:
-			return Object.assign({}, state, { appMode: action.mode})
-		case ActionTypes.SET_DIRECTORY_SEARCH_MODE:
-		case ActionTypes.SET_DIRECTORY_SEARCH_TEXT:
-		case ActionTypes.SET_DIRECTORY_SEARCH_TAG:
-			return Object.assign({}, state, { directory: directory(state.directory, action)})
+			return Object.assign({}, state, { mode: action.mode})
 		default:
-			return state		
+			return state
 	}
 }
 
-export { appReducer }
+const rootReducer = combineReducers({
+	app,
+	directory
+})
+
+export { rootReducer }
