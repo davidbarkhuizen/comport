@@ -12,8 +12,6 @@ import App from './components/app.js'
 
 import { appReducer } from './reducers/app.js'
 
-import Konst from './konst.js'
-
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
 function buildModel(rawModel) {
@@ -31,26 +29,14 @@ function buildModel(rawModel) {
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
-function initialState() {
+const store = createStore(appReducer)
 
-	return {
-		appMode: Konst.AppMode.None,
-		directory: {
-			search: {
-				mode: Konst.SearchMode.None,
-				text: '',
-				tag: '',
-				results: []				
-			}
-		}
-	}
-}
+const unsubscribe = store.subscribe(() => {
 
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
-
-const store = createStore(appReducer, initialState())
-
-const unsubscribe = store.subscribe(() => {})
+	const state = store.getState()
+	console.log('state:')
+	console.log(state)
+})
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 

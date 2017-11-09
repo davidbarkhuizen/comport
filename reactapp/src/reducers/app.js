@@ -1,40 +1,63 @@
 import ActionTypes from '../actionTypes.js'
 
-// (previousState, action) => newState
+import Konst from '../konst.js'
 
-function appReducer(state, action) {
+function initialState() {
 
-	console.log('action:')
-	console.log(action)
+	return {
+		appMode: Konst.AppMode.None,
+		directory: {
+			search: {
+				mode: Konst.SearchMode.None,
+				text: '',
+				tag: '',
+				results: []				
+			}
+		}
+	}
+}
 
-	var newState;
+function directorySearch(state, action) {
+
+	switch (action.type)
+	{
+		case ActionTypes.SET_DIRECTORY_SEARCH_MODE:
+			return Object.assign({}, state, { mode: action.mode })
+		case ActionTypes.SET_DIRECTORY_SEARCH_TEXT:
+			return Object.assign({}, state, { text: action.text })
+		case ActionTypes.SET_DIRECTORY_SEARCH_TAG:
+			return Object.assign({}, state, { tag: action.tag })
+		default:
+			return state		
+	}
+}
+
+function directory(state, action) {
+
+	switch (action.type)
+	{
+		case ActionTypes.SET_DIRECTORY_SEARCH_MODE:
+		case ActionTypes.SET_DIRECTORY_SEARCH_TEXT:
+		case ActionTypes.SET_DIRECTORY_SEARCH_TAG:
+			return Object.assign({}, state, { search: directorySearch(state.search, action)})
+		default:
+			return state		
+	}
+}
+
+function appReducer(state = initialState(), action) {
 
 	switch (action.type)
 	{
 		case ActionTypes.SET_APP_MODE:
-			newState = Object.assign({}, state)
-			newState.appMode = action.mode
-			break
+			return Object.assign({}, state, { appMode: action.mode})
 		case ActionTypes.SET_DIRECTORY_SEARCH_MODE:
-			newState = Object.assign({}, state)
-			newState.directory.search.mode = action.mode
-			break
 		case ActionTypes.SET_DIRECTORY_SEARCH_TEXT:
-			newState = Object.assign({}, state)
-			newState.directory.search.text = action.text
-			break
 		case ActionTypes.SET_DIRECTORY_SEARCH_TAG:
-			newState = Object.assign({}, state)
-			newState.directory.search.tag = action.tag
-			break
+			return Object.assign({}, state, { directory: directory(state.directory, action)})
 		default:
 			return state		
 	}
-
-	console.log('newState')
-	console.log(newState)
-	
-	return newState
 }
 
 export { appReducer }
