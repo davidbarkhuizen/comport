@@ -1,3 +1,5 @@
+// react
+//
 import React from 'react';
 import ReactDOM from 'react-dom';
 
@@ -43,6 +45,8 @@ const unsubscribe = store.subscribe(() => {
 const model = buildModel(rawModel)
 
 ReactDOM.render(
-	<App model={model} store={store}/>,
+	<Provider store={store}>
+		<App model={model} store={store}/>
+	</Provider>,
 	document.getElementById('root')
 )
