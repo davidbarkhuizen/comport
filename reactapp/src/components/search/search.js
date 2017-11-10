@@ -1,8 +1,11 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 
 import Konst from '../../konst.js'
 
-import SearchModeSelector from './searchmodeselector.js' 
+import SearchModeSelector from '../../containers/search/searchmodeselector.js' 
+
+/*
 import SearchTagCloud from './searchtagcloud.js' 
 import SearchBox from './searchbox.js' 
 import SearchResults from './searchresults.js' 
@@ -112,15 +115,8 @@ class Search extends React.Component {
 		const showSearchBox = this.state.mode === Konst.SearchMode.Word
 		
 		return (
-			<div className={this.props.isVisible ? '' : 'hidden'}>	
 
-				<div className="font-normal">businesses and activities</div>
 
-				<SearchModeSelector
-					mode={this.state.mode}
-					onModeSelected={this.handleSearchModeChanged}
-					store={this.props.store}
-				/>
 
 				<br/>
 				
@@ -154,9 +150,22 @@ class Search extends React.Component {
 					results={this.state.results}
 					onSearchResultClicked={this.handleSearchResultSelected}
 				/>
-			</div>
 		)
 	}
+}
+
+*/
+
+const Search = ({isVisible}) => (
+
+	<div className={isVisible ? '' : 'hidden'}>	
+		<div className="font-normal">businesses and activities</div>
+			<SearchModeSelector/>
+	</div>
+)
+
+Search.propTypes = {
+	isVisible: PropTypes.bool.isRequired
 }
 
 export default Search

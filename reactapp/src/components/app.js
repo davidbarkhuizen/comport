@@ -9,11 +9,12 @@ import logo_img from '../images/logo.80.png'
 // components
 //
 import AppModeSelector from '../containers/appmodeselector.js'
+import Search from '../containers/search/search.js'
 import EventCalendar from '../containers/eventcalendar.js'
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
-const app = (appMode) => (
+const app = () => (
 	<div>
 		<hr className="two-thirds-width"/>
 		<div>
@@ -23,6 +24,7 @@ const app = (appMode) => (
 		<div className="margin"><img src={logo_img} alt="logo"/></div>
 		<AppModeSelector/>
 		<br/>
+		<Search/>
 		<EventCalendar/>
 	</div>
 )

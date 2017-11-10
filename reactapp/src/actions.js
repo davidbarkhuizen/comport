@@ -11,3 +11,7 @@ export function setAppMode(mode) {
 	return { type: ActionTypes.SET_APP_MODE, mode }
 } 
 
+export function setDirectorySearchMode(mode) {
+
+	return { type: ActionTypes.SET_DIRECTORY_SEARCH_MODE, mode }
+} 
