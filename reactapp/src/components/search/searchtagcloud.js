@@ -1,6 +1,6 @@
 import React from 'react'
 
-import ActionTypes from '../../actionTypes.js'
+import { ActionTypes } from '../../actions.js'
 
 import SearchTag from './searchtag.js'
 

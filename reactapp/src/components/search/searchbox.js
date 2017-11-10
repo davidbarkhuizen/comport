@@ -1,7 +1,7 @@
 import React from 'react'
 
 import Konst from '../../konst.js'
-import ActionTypes from '../../actionTypes.js'
+import { ActionTypes } from '../../actions.js'
 
 class SearchBox extends React.Component {
 

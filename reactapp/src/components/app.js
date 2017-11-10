@@ -4,7 +4,8 @@ import React from 'react';
 //
 import Search from './search/search.js'
 import EventCalendar from './eventcalendar.js'
-import AppModeSelector from './appmodeselector.js'
+
+import AppModeSelector from '../containers/appmodeselector.js'
 
 import Konst from '../konst.js'
 
@@ -41,7 +42,7 @@ class App extends React.Component {
 					<div>local businesses, activities and events</div>
 				</div>
 				<div className="margin"><img src={logo_img} alt="logo"/></div>
-				<AppModeSelector mode={this.state.appMode} onModeSelected={(newMode) => { this.handleAppModeChanged(newMode) } } store={this.props.store}/>
+				<AppModeSelector store={this.props.store}/>
 				<br/>
 				
 				<Search 

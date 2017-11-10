@@ -1,6 +1,6 @@
 import { combineReducers } from 'redux'
 
-import ActionTypes from '../actionTypes.js'
+import { ActionTypes } from '../actions.js'
 
 import Konst from '../konst.js'
 
