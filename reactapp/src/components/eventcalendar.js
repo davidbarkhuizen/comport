@@ -1,21 +1,15 @@
-import React from 'react';
-import '../../node_modules/bootstrap/dist/css/bootstrap.min.css';
-import '../css/index.css';
+import React from 'react'
+import PropTypes from 'prop-types'
 
+const eventCalendar = ({isVisible}) => (
 
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+	<div className={isVisible === true ? '' : 'hidden'}>	
+		<div className="font-normal">event calendar</div>
+	</div>
+)
 
-class EventCalendar extends React.Component {
-
-	render() {
-		return (
-			<div className={this.props.isVisible ? '' : 'hidden'}>	
-				<div className="font-normal">event calendar</div>
-			</div>
-		)
-	}
+eventCalendar.propTypes = {
+	isVisible: PropTypes.bool.isRequired
 }
 
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
-
-export default EventCalendar
+export default eventCalendar

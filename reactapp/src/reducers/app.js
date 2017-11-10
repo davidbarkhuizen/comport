@@ -1,8 +1,21 @@
 import { combineReducers } from 'redux'
 
 import { ActionTypes } from '../actions.js'
-
 import Konst from '../konst.js'
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+
+import model from '../model.json'
+
+function extractTagsFromData(data) {
+
+	return data
+		.map((item) => item.tags)
+		.reduce((a,b) => a.concat(b), [])
+		.filter((x, i, a) => a.indexOf(x) === i)
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
 function directorySearch(state, action) {
 
@@ -24,6 +37,8 @@ function directory(state, action) {
 	state = (state !== undefined)
 		? state
 		: {
+			data: model.data,
+			tags: extractTagsFromData(model.data),
 			search: {
 				mode: Konst.SearchMode.None,
 				text: '',
@@ -47,7 +62,9 @@ function app(state, action) {
 
 	state = (state !== undefined)
 		? state
-		: { mode: Konst.AppMode.None }
+		: { 
+			mode: Konst.AppMode.None,
+		}
 
 	switch (action.type)
 	{
