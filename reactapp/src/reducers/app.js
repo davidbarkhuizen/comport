@@ -3,6 +3,8 @@ import { combineReducers } from 'redux'
 import { ActionTypes } from '../actions.js'
 import Konst from '../konst.js'
 
+import search from '../logic/search.js'
+
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
 import model from '../model.json'
@@ -17,19 +19,37 @@ function extractTagsFromData(data) {
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
-function directorySearch(state, action) {
+function directorySearch(state, action, data) {
+
+state = (state !== undefined)
+	? state
+	: {
+		mode: Konst.SearchMode.None,
+		text: '',
+		tag: '',
+		results: []				
+	}
 
 	switch (action.type)
 	{
 		case ActionTypes.SET_DIRECTORY_SEARCH_MODE:
-			return Object.assign({}, state, { mode: action.mode })
+			return Object.assign({}, state, { 
+				mode: action.mode,
+				results: search(data, action.mode, state.text, state.tag)  
+			})
 		case ActionTypes.SET_DIRECTORY_SEARCH_TEXT:
-			return Object.assign({}, state, { text: action.text })
+			return Object.assign({}, state, { 
+				text: action.text,
+				results: search(data, state.mode, action.text, state.tag)  
+			})
 		case ActionTypes.SET_DIRECTORY_SEARCH_TAG:
-			return Object.assign({}, state, { tag: action.tag })
-		default:
-			return state
+			return Object.assign({}, state, { 
+				tag: action.tag,
+				results: search(data, state.mode, state.text, action.tag)
+			})
 	}
+
+	return state
 }
 
 function directory(state, action) {
@@ -39,12 +59,7 @@ function directory(state, action) {
 		: {
 			data: model.data,
 			tags: extractTagsFromData(model.data),
-			search: {
-				mode: Konst.SearchMode.None,
-				text: '',
-				tag: '',
-				results: []				
-			}
+			search: directorySearch(state, action, model.data)
 		}
 
 	switch (action.type)
@@ -52,27 +67,25 @@ function directory(state, action) {
 		case ActionTypes.SET_DIRECTORY_SEARCH_MODE:
 		case ActionTypes.SET_DIRECTORY_SEARCH_TEXT:
 		case ActionTypes.SET_DIRECTORY_SEARCH_TAG:
-			return Object.assign({}, state, { search: directorySearch(state.search, action)})
-		default:
-			return state		
+			return Object.assign({}, state, { search: directorySearch(state.search, action, state.data)})
 	}
+
+	return state
 }
 
 function app(state, action) {
 
 	state = (state !== undefined)
 		? state
-		: { 
-			mode: Konst.AppMode.None,
-		}
+		: { mode: Konst.AppMode.None }
 
 	switch (action.type)
 	{
 		case ActionTypes.SET_APP_MODE:
 			return Object.assign({}, state, { mode: action.mode})
-		default:
-			return state
 	}
+
+	return state
 }
 
 const rootReducer = combineReducers({

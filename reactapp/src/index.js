@@ -20,8 +20,6 @@ const store = createStore(rootReducer)
 const unsubscribe = store.subscribe(() => {
 
 	const state = store.getState()
-	console.log('state:')
-	console.log(state)
 })
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-

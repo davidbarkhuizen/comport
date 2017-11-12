@@ -8,7 +8,6 @@ const SearchBox = ({text, isFocus, isVisible, onChange}) => (
 			value={text} 
 			onChange={evt => { onChange(evt.target.value) }}
 			placeholder="enter search text..."
-			autoFocus={isFocus}
 		/>
 	</div>
 )
