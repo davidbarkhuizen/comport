@@ -30,14 +30,3 @@ const app = () => (
 )
 
 export default app
-
-/*
-	import Search from './search/search.js'
-	
-	<Search 
-		data={directory} 
-		tags={tags} 
-		isVisible={appMode === Konst.AppMode.Directory}
-		store={store}
-	/>
-*/

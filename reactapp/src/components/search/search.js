@@ -1,13 +1,11 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
-import Konst from '../../konst.js'
-
 import SearchModeSelector from '../../containers/search/searchmodeselector.js' 
+import SearchTagCloud from '../../containers/search/searchTagCloud.js' 
+import SearchBox from '../../containers/search/searchBox.js' 
 
 /*
-import SearchTagCloud from './searchtagcloud.js' 
-import SearchBox from './searchbox.js' 
 import SearchResults from './searchresults.js' 
 
 class Search extends React.Component {
@@ -160,7 +158,12 @@ const Search = ({isVisible}) => (
 
 	<div className={isVisible ? '' : 'hidden'}>	
 		<div className="font-normal">businesses and activities</div>
-			<SearchModeSelector/>
+		<br/>
+		<SearchModeSelector/>
+		<div className="margin">
+			<SearchBox/>
+			<SearchTagCloud/>
+		</div>
 	</div>
 )
 

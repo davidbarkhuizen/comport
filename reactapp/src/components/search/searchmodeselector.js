@@ -33,11 +33,9 @@ const SearchModeSelector = ({mode, onSearchModeSelected}) => (
 			>view all</a>
 		</div>
 	</div>
-
 ) 
 
 SearchModeSelector.propTypes = {
-	isVisible: PropTypes.bool.isRequired,
 	onSearchModeSelected: PropTypes.func.isRequired
 }
 

@@ -1,9 +1,7 @@
 import { connect } from 'react-redux'
 
-import Konst from '../../konst.js'
-import { default as SearchModeSelectorComponent } from '../../components/search/searchmodeselector.js'
-
 import { setDirectorySearchMode } from '../../actions.js'
+import { default as SearchModeSelectorComponent } from '../../components/search/searchmodeselector.js'
 
 const mapStateToProps = state => {
 
